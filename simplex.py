@@ -10,21 +10,21 @@ def simplex(A,b,c):
     m, n = A.shape
 
     # 辞書の初期化
-    dic = np.zeros((m + 1, n + 1), dtype='float64')
+    dic = np.zeros((m + 1, n + 1))
     for i in range(m):
         for j in range(n):
             dic[i + 1, j + 1] += A[i, j]
     for i in range(n):
         dic[0, i + 1] += c[i]
     for i in range(m):
-        dic[i + 1, 0] += -b[i]
+        dic[i + 1, 0] += b[i]
     
     #print(dic)    
     
     # 非基底変数
-    non_basis_variable = np.zeros(n, dtype='float64')
+    non_basis_variable = np.zeros(n)
     # 基底変数
-    basis_variable = np.zeros(m, dtype='float64')
+    basis_variable = np.zeros(m)
     
     #各変数のindex、0-(n-1)とn-(m-1)
     non_basis_variable_index = np.arange(n)
@@ -39,8 +39,8 @@ def simplex(A,b,c):
     
     # 原点が許容解であるか確認
     for i in range(n):
-        #初期の非基底変数を全て0にする
-        non_basis_variable[i] = 0.0
+        #　初期の非基底変数を全て0にする
+        non_basis_variable[i] = 0
     
     # 非基底変数が原点のときの基底変数を代入
     basis_variable = np.dot(dic[1:, 1:], non_basis_variable) + dic[1:, 0]
@@ -94,7 +94,7 @@ def loop(dic, m, n, non_basis_variable, basis_variable, basis_variable_index, no
                 i_pivot = i_min
                 index_pivot = basis_variable_index[i_min - 1]
 
-        # 選択された非基底変数を許容性を保存しつつ最大限まで増加させる
+        # 選択された非基底変数を最大限まで増加させる
         non_basis_variable[j_pivot - 1] = d_min
         basis_variable[i_pivot - 1] = 0.0
 
@@ -120,8 +120,8 @@ def show_result(sol, dec_val_dic):
         print(f"変数{i+1}：{dec_val_dic[i]}")
 
 # 実行する場所
-A = np.array([[-2, 2, 0], [-1, -1, 2], [-1, -1, -1]])
-b = np.array([-6, -3, -3])
-c = np.array([-1, 2, -1])
+A = np.array([[1,2],[1,1],[3,1]])
+b = np.array([10,6,12])
+c = np.array([2,1])
 sol, dec_val_dic = simplex(A, b, c)
 show_result(sol, dec_val_dic)
